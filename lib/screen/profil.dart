@@ -34,7 +34,8 @@ class _ProfilePageState extends State<ProfilePage> {
           'Profile',
           style: TextStyle(color: Colors.black),
         ),
-        centerTitle: true, // Mengatur teks agar berada di tengah
+        centerTitle: true,
+        automaticallyImplyLeading: false, // Mengatur teks agar berada di tengah
       ),
       body: Column(
         children: [

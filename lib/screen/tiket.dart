@@ -38,7 +38,8 @@ class _TicketPageState extends State<TicketPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('My Ticket'),
-        centerTitle: true, // Mengatur teks agar berada di tengah
+        centerTitle: true,
+        automaticallyImplyLeading: false, // Mengatur teks agar berada di tengah
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -131,7 +132,7 @@ class _TicketPageState extends State<TicketPage> {
       bottomNavigationBar: BottomNavigationBar(
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.home, color: Color(0xFFC45390)),
+            icon: Icon(Icons.home),
             label: 'Home',
           ),
           BottomNavigationBarItem(
@@ -139,7 +140,7 @@ class _TicketPageState extends State<TicketPage> {
             label: 'Tickets',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person, color: Color(0xFFC45390)),
+            icon: Icon(Icons.person),
             label: 'Profile',
           ),
         ],

@@ -1,175 +1,256 @@
 import 'package:flutter/material.dart';
-import 'tiket.dart'; // assuming this is where your TicketPage is defined
-import 'home_page.dart';
-import 'auth.dart'; // assuming this is where your AuthService is defined
-import 'login_page.dart'; // assuming this is where your LoginPage is defined
 
-class ProfileApp extends StatelessWidget {
+class ChooseTicketPage extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Profile Page',
-      theme: ThemeData(
-        primarySwatch: Colors.pink,
-      ),
-      home: ProfilePage(),
-    );
-  }
+  _ChooseTicketPageState createState() => _ChooseTicketPageState();
 }
 
-class ProfilePage extends StatefulWidget {
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  int _selectedIndex = 2; // Set the initial selected index to 2 (Profile)
+class _ChooseTicketPageState extends State<ChooseTicketPage> {
+  String _selectedDate = '';
+  String _selectedTicket = '';
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          'Profile',
-          style: TextStyle(color: Colors.black),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Kembali ke halaman sebelumnya
+          },
         ),
-        centerTitle: true, // Mengatur teks agar berada di tengah
+        title: Text('Choose Ticket'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.share),
+            onPressed: () {},
+          ),
+        ],
       ),
-      body: Column(
-        children: [
-          Container(
-            padding: EdgeInsets.symmetric(horizontal: 120.0),
-            child: Column(
-              children: [
-                CircleAvatar(
-                  radius: 50,
-                  backgroundImage: AssetImage(
-                      'assets/rizky_setiawan.jpg'), // Add your profile picture here
-                ),
-                SizedBox(height: 10),
-                Text(
-                  'Alex Marshall',
-                  style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Image.asset(
+                'assets/denah.jpg', // Pastikan untuk menambahkan gambar Anda ke folder assets
+                width: double.infinity,
+                fit: BoxFit.cover,
+              ),
+              SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildDateButton('Fri\n5 Jul'),
+                  _buildDateButton('Sat\n6 Jul'),
+                  _buildDateButton('Sun\n7 Jul'),
+                ],
+              ),
+              SizedBox(height: 16),
+              _buildTicketOption(
+                'Tiket Reguler - Festival - Hari 1',
+                'Rp402.500',
+                'Guest Starts: RAN, Yura Yunita, Nadin Amizah, Mocca Feat.Olski, JKT48, Dere, Collective, and Mitty Zasia',
+              ),
+              SizedBox(height: 16),
+              _buildTicketOption(
+                'Tiket Reguler - Super Festival - Hari 1',
+                'Rp575.000',
+                'Guest Starts: RAN, Yura Yunita, Nadin Amizah, Mocca Feat.Olski, JKT48, Dere, Collective, and Mitty Zasia',
+              ),
+              SizedBox(height: 32),
+              Center(
+                child: ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xFFC45390), // Warna tombol merah
+                    padding: EdgeInsets.symmetric(
+                        horizontal: 50, vertical: 20), // Padding tombol
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20), // Radius border
+                    ),
                   ),
-                ),
-                SizedBox(height: 5),
-                Text(
-                  '@alex_marshall',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.grey,
-                  ),
-                ),
-                SizedBox(height: 20),
-                ElevatedButton(
                   onPressed: () {
-                    // Add edit profile code here
+                    Navigator.pushNamed(
+                        context, '/ticket'); // Navigasi ke halaman TicketPage
                   },
-                  child: Text('Edit'),
+                  child: Container(
+                    width: double.infinity,
+                    alignment: Alignment.center,
+                    child: Text(
+                      'Book Now',
+                      style: TextStyle(color: Colors.white), // Warna teks putih
+                    ),
+                  ),
+                ),
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDateButton(String date) {
+    return TextButton(
+      onPressed: () {
+        setState(() {
+          _selectedDate = date;
+        });
+      },
+      style: TextButton.styleFrom(
+        backgroundColor:
+            _selectedDate == date ? Color(0xFFC45390) : Colors.transparent,
+        foregroundColor: _selectedDate == date ? Colors.white : Colors.black,
+      ),
+      child: Text(date),
+    );
+  }
+
+  Widget _buildTicketOption(String title, String price, String details) {
+    return TicketOption(
+      title: title,
+      price: price,
+      details: details,
+      isSelected: _selectedTicket == title,
+      onSelected: () {
+        setState(() {
+          _selectedTicket = title;
+        });
+      },
+    );
+  }
+}
+
+class TicketOption extends StatefulWidget {
+  final String title;
+  final String price;
+  final String details;
+  final bool isSelected;
+  final VoidCallback onSelected;
+
+  TicketOption({
+    required this.title,
+    required this.price,
+    required this.details,
+    required this.isSelected,
+    required this.onSelected,
+  });
+
+  @override
+  _TicketOptionState createState() => _TicketOptionState();
+}
+
+class _TicketOptionState extends State<TicketOption> {
+  bool _expanded = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: widget.onSelected,
+      child: Container(
+        padding: EdgeInsets.all(16),
+        decoration: BoxDecoration(
+          color: widget.isSelected
+              ? Color.fromARGB(255, 255, 255, 255)
+              : Colors.white,
+          borderRadius:
+              BorderRadius.circular(20), // Border radius sesuai gambar
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.5),
+              spreadRadius: 1,
+              blurRadius: 5,
+              offset: Offset(0, 3),
+            ),
+          ],
+          border: widget.isSelected
+              ? Border.all(color: Color(0xFFC45390), width: 2)
+              : null, // Border saat dipilih
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Icon(Icons.event_seat, color: Color(0xFFC45390)),
+                SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 16,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
                 ),
               ],
             ),
-          ),
-          Expanded(
-            child: Container(
-              child: ListView(
-                children: [
-                  ListTile(
-                    leading: Icon(Icons.settings),
-                    title: Text('Setting'),
-                    onTap: () {
-                      // Add setting code here
-                    },
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text(
+                  'Visitor',
+                  style: TextStyle(fontSize: 14),
+                ),
+                Text(
+                  widget.price,
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.pink,
+                    fontWeight: FontWeight.bold,
                   ),
-                  ListTile(
-                    leading: Icon(Icons.person),
-                    title: Text('Friend'),
-                    onTap: () {
-                      // Add friend code here
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.group),
-                    title: Text('New Group'),
-                    onTap: () {
-                      // Add new group code here
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.support),
-                    title: Text('Support'),
-                    onTap: () {
-                      // Add support code here
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.info),
-                    title: Text('About us'),
-                    onTap: () {
-                      // Add about us code here
-                    },
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.logout, color: Colors.red),
-                    title: Text(
-                      'Logout',
-                      style: TextStyle(color: Colors.red),
+                ),
+              ],
+            ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.remove, color: Color(0xFFC45390)),
+                      onPressed: () {},
                     ),
-                    onTap: () async {
-                      await AuthService().signOut();
-                      Navigator.of(context).pushReplacement(MaterialPageRoute(
-                          builder: (context) =>
-                              LoginPage())); // Navigasi ke halaman LoginPage setelah logout
-                    },
-                  ),
+                    Text('1'),
+                    IconButton(
+                      icon: Icon(Icons.add, color: Color(0xFFC45390)),
+                      onPressed: () {},
+                    ),
+                  ],
+                ),
+                TextButton(
+                  onPressed: () {
+                    setState(() {
+                      _expanded = !_expanded;
+                    });
+                  },
+                  child: Text(_expanded ? 'See Less' : 'See More'),
+                ),
+              ],
+            ),
+            if (_expanded)
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(height: 8),
+                  Text(widget.details),
                 ],
               ),
+            SizedBox(height: 8),
+            Row(
+              children: [
+                Icon(Icons.payment, color: Color(0xFFC45390)),
+                SizedBox(width: 8),
+                Text('Payment'),
+                Spacer(),
+                Text('Transfer Bank - Bank Mandiri'),
+              ],
             ),
-          ),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.rocket),
-            label: 'Tickets',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
-        ],
-        selectedItemColor: Colors.pink,
-        currentIndex: _selectedIndex,
-        onTap: (int index) {
-          if (index == 0) {
-            // Index 0 adalah item "Home"
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      HomePage()), // Ganti dengan halaman yang sesuai
-            );
-          } else if (index == 1) {
-            // Index 1 adalah item "Tickets"
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => TicketPage()),
-            );
-          } else if (index == 2) {
-            // Index 2 adalah item "Profile"
-            // tidak ada navigasi karena sudah berada di halaman profil
-          }
-          setState(() {
-            _selectedIndex = index; // Update selected index
-          });
-        },
+          ],
+        ),
       ),
     );
   }

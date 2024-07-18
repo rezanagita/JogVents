@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'jadwal detail.dart'; // Correct import statement
 
 class PrambananJazzPage extends StatelessWidget {
   @override
@@ -159,7 +160,11 @@ class PrambananJazzPage extends StatelessWidget {
               Center(
                 child: ElevatedButton(
                   onPressed: () {
-                    Navigator.pushNamed(context, '/choose-ticket');
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => ChooseTicketPage()),
+                    );
                   },
                   style: ButtonStyle(
                     backgroundColor: MaterialStateProperty.all<Color>(Color(
