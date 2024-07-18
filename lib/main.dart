@@ -2,13 +2,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/firebase_options.dart';
-import 'login_page.dart';
-import 'register_page.dart';
-import 'home_page.dart'; // Import halaman beranda
-import 'detail.dart';
-import 'jadwal detail.dart'; // Import halaman jadwal
-import 'tiket.dart';
-import 'profil.dart';
+import 'screen/login_page.dart';
+import 'screen/register_page.dart';
+import 'screen/home_page.dart'; // Import halaman beranda
+import 'screen/detail.dart';
+import 'screen/jadwal detail.dart'; // Import halaman jadwal
+import 'screen/tiket.dart';
+import 'screen/profil.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
